@@ -1,0 +1,105 @@
+{% extends 'main.html' %}
+{% load static %}
+
+
+{% block title %}
+    پروفایل {{ user.name }}
+{% endblock %}
+
+
+{% block content %}
+    <main class="main-content">
+        <div class="container-fluid">
+            <div class="page-header">
+                <div>
+                    <h3>پروفایل کاربر</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                            <div class="card-body text-center m-t-70-minus">
+                                <figure class="avatar avatar-xl m-b-20">
+                                    <img src="{{ user.profile_picture.url }}" class="rounded-circle" alt="...">
+                                </figure>
+                                <h5>{{ user.name }}</h5>
+                                <p class="text-muted small">{{ user.job }}</p>
+                                <p>{{ user.bio }}</p>
+                                <div class="row m-t-30">
+                                    <div class="col-4 text-info">
+                                        <h5 class="primary-font">{{ posts|length }}</h5>
+                                        <span>مطلب</span>
+                                    </div>
+                                    <div class="col-4 text-success">
+                                        <h5 class="primary-font">{{ followers|length }}</h5>
+                                        <span>دنبال کننده</span>
+                                    </div>
+                                    <div class="col-4 text-warning">
+                                        <h5 class="primary-font">{{ num_liked_post }}</h5>
+                                        <span>لایک</span>
+                                    </div>
+                                </div>
+                                {% if request.user != user %}
+                                <div class="row m-t-30 text-center">
+                                    <form method="post" action="{% url 'follow_user' user.id %}">
+                                        {% csrf_token %}
+                                        {% if follower_obj %}
+                                            <button type="submit" class="btn btn-danger btn-sm mr-auto">
+                                                <i class="fa fa-minus m-l-5"></i>
+                                                دنبال نکردن
+                                            </button>
+                                        {% else %}
+                                            <button type="submit" class="btn btn-success btn-sm mr-auto">
+                                            <i class="fa fa-plus m-l-5"></i>
+                                                دنبال کردن
+                                            </button>
+                                        {% endif %}
+                                    </form>
+
+
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                </div>
+
+                <div class="col-md-8">
+                     <div class="card">
+                         <div class="card-body">
+                             <h5 class="card-title d-flex justify-content-between align-items-center">
+                                 اطلاعات
+                             </h5>
+                             <div class="row mb-2">
+                                 <div class="col-6 text-muted">نام:</div>
+                                 <div class="col-6">{{ user.name }}</div>
+                             </div>
+                             <div class="row mb-2">
+                                 <div class="col-6 text-muted">سن:</div>
+                                 <div class="col-6">{{ age }}</div>
+                             </div>
+
+                             {% if user.job %}
+                                 <div class="row mb-2">
+                                    <div class="col-6 text-muted">شغل:</div>
+                                    <div class="col-6">{{ user.job }}</div>
+                                </div>
+                             {% endif %}
+
+                             {% if user.location %}
+                                <div class="row mb-2">
+                                    <div class="col-6 text-muted">آدرس:</div>
+                                    <div class="col-6">{{ user.location }}</div>
+                                </div>
+                             {% endif %}
+
+                             <div class="row mb-2">
+                                 <div class="col-6 text-muted">ایمیل:</div>
+                                 <div class="col-6">{{ user.email }}</div>
+                             </div>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

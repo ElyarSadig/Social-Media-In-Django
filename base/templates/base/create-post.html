@@ -1,0 +1,57 @@
+{% extends 'main.html' %}
+
+
+{% block title %}
+    create-post
+{% endblock %}
+
+
+
+{% block content %}
+    <main class="main-content">
+
+        <div class="container-fluid">
+
+            <!-- begin::page header -->
+            <div class="page-header">
+                <div>
+                    <h3>ساخت پست</h3>
+                </div>
+            </div>
+            <!-- end::page header -->
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="title">عنوان</label>
+                                    <input type="text" class="form-control" id="title" name="title" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="content">محتوا</label>
+                                    <textarea class="form-control" name="content" id="content"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exampleFormControlFile1">آپلود تصویر</label>
+                                    <input type="file" class="form-control-file" id="exampleFormControlFile1" name="image">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">ثبت</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+
+        </div>
+    </main>
+{% endblock %}
+
+
+

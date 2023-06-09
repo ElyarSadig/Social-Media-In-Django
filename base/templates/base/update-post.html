@@ -1,0 +1,68 @@
+{% extends 'main.html' %}
+
+
+{% block title %}
+    Update-Post
+{% endblock %}
+
+
+
+{% block content %}
+    <main class="main-content">
+
+        <div class="container-fluid">
+
+            <!-- begin::page header -->
+            <div class="page-header">
+                <div>
+                    <h3>ویرایش پست</h3>
+                </div>
+            </div>
+            <!-- end::page header -->
+            <form method="post" enctype="multipart/form-data">
+            <div class="row">
+                {% csrf_token %}
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="title">عنوان</label>
+                                <input type="text" class="form-control" id="title" name="title" value="{{ post.title }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="content">محتوا</label>
+                                <textarea class="form-control" name="content" id="content">{{ post.content }}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleFormControlFile1">ویرایش تصویر</label>
+                                <input type="file" class="form-control-file" id="exampleFormControlFile1" name="image">
+                            </div>
+
+                            <button type="submit" class="btn btn-success">ویرایش</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <img height="500" src="{{ post.image.url }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            عکس پست
+                        </div>
+                    </div>
+                </div>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: red;">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            </form>
+        </div>
+    </main>
+{% endblock %}
+
+

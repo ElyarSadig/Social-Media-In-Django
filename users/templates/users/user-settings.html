@@ -1,0 +1,115 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "vendors/datepicker-jalali/bootstrap-datepicker.min.css" %}">
+    <link rel="stylesheet" href="{% static "vendors/datepicker/daterangepicker.css" %}">
+{% endblock %}
+
+{% block title %}
+    settings
+{% endblock %}
+
+{% block content %}
+<main class="main-content">
+
+    <div class="container-fluid">
+
+        <!-- begin::page header -->
+        <div class="page-header">
+            <div>
+                <h3>تنظیمات پروفایل شما</h3>
+            </div>
+        </div>
+        <!-- end::page header -->
+        <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <label>نام</label>
+                                <input name="name" type="text" value="{{ user.name }}" class="form-control" placeholder="نام خود را وارد کنید." required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>تلفن</label>
+                                <input maxlength="11" name="phoneNumber" type="text" value="{% if user.phoneNumber %}{{ user.phoneNumber }}{% endif %}" class="form-control" placeholder="تلفن خود را وارد کنید.">
+                                {% if error %}
+                                    <small style="color: red">{{ error }}</small>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label>شغل</label>
+                                <input name="job" type="text" value="{% if user.job %}{{ user.job }}{% endif %}" class="form-control" placeholder="میتوانید این قسمت را خالی نگه دارید.">
+                            </div>
+
+                            <div class="form-group">
+                                <label>آدرس</label>
+                                <input name="address" type="text" value="{% if user.location %}{{ user.location }}{% endif %}" class="form-control" placeholder="آدرس خود را وارد کنید.">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="">تاریخ تولد</label>
+                                <input type="text" value="{{ shamsi_date }}" name="date-picker-shamsi-list" placeholder="۱۳۸۰/۱۲/۰۱" class="form-control text-right" dir="ltr" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>بیو</label>
+                                <textarea name="bio" class="form-control" rows="3" placeholder="خود را در چند کلمه توصیف کنید.">{{ user.bio }}</textarea>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">نام کاربری</label>
+                                <div class="col-sm-10">
+                                    <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{ user.username }}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">ایمیل</label>
+                                <div class="col-sm-10">
+                                    <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{ user.email }}">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">اعمال تغییر</button>
+                            <a href="{% url 'change-password' %}" class="btn btn-primary"><span style="color: white">تغییر رمز عبور</span></a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="{{ user.profile_picture.url }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <input name="profile-image" type="file" class="form-control-file" id="exampleFormControlFile1"
+                                   accept="image/png, image/jpeg" onchange="this.form.submit()">
+                        </div>
+                    </div>
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: red;">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+    </form>
+</div>
+
+</main>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'vendors/datepicker-jalali/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'vendors/datepicker-jalali/bootstrap-datepicker.fa.min.js' %}"></script>
+    <script src="{% static 'vendors/datepicker/daterangepicker.js' %}"></script>
+    <script src="{% static 'js/examples/datepicker.js' %}"></script>
+{% endblock %}
+

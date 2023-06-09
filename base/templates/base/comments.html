@@ -1,0 +1,116 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}
+    comments
+{% endblock %}
+
+
+{% block content %}
+    <main class="main-content">
+
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="{% url 'profile-view' post.user.id %}">
+                                <figure class="avatar">
+                                    <img  src="{{ post.user.profile_picture.url }}" class="rounded-circle">
+                                </figure>
+                                {{ post.user.name }}
+                            </a>
+
+                        </div>
+                        <img height="450" src="{{ post.image.url }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ post.title }}
+                            </h5>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+
+            <div class="card chat-app-wrapper">
+                <div class="row chat-app">
+                    <div class="col-lg-3 chat-sidebar">
+                        <div class="text-center">
+                            <p>لیست کاربران</p>
+                            <hr>
+                        </div>
+                        <div class="chat-sidebar-messages">
+                            <div class="list-group">
+                                {% for comment in comments %}
+                                    <a href="#"
+                                       class="list-group-item align-items-center d-flex list-group-item-action">
+                                        <div>
+                                            <figure class="avatar avatar-sm">
+                                                <img src="{{ comment.user.profile_picture.url }}"
+                                                     class="rounded-circle">
+                                            </figure>
+                                        </div>
+                                        <div>
+                                            <h6 class="m-0 primary-font">{{ comment.user.name }}</h6>
+                                            <p class="m-0 small">{{ comment.content }}</p>
+                                        </div>
+
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 chat-body">
+                        <div class="chat-body-messages">
+                            <div class="message-items">
+                                {% for comment in comments %}
+
+                                    {% if comment.user == request.user %}
+                                        <div class="message-item outgoing-message">
+                                            {{ comment }}
+                                            {#<small class="message-item-date text-muted">22.30</small>#}
+                                        </div>
+                                    {% else %}
+                                        <div class="message-item">
+                                            <figure class="avatar avatar-sm">
+                                                <img src="{{ comment.user.profile_picture.url }}"
+                                                     class="rounded-circle">
+                                            </figure>
+                                            {{ comment }}
+                                        </div>
+                                    {% endif %}
+
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="chat-body-footer">
+                            <form class="d-flex align-items-center" method="post">
+                                {% csrf_token %}
+                                <input type="text" name="content" class="form-control" placeholder="پیام ...">
+                                <div class="d-flex">
+                                    <button type="submit" class="mr-3 btn btn-primary btn-floating">
+                                        <i class="fa fa-send"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+{% endblock %}
+
+
+{% block script %}
+    <script src="{% static 'vendors/lightbox/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'js/examples/lightbox.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,186 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}
+    user-profile
+{% endblock %}
+
+{% block content %}
+<main class="main-content">
+
+    <div class="container-fluid">
+        <div class="page-header">
+            <div>
+                <h3>پروفایل شما</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{{ user.profile_picture.url }}" class="card-img-top" alt="...">
+                <div class="card-body text-center m-t-70-minus">
+                    <figure class="avatar avatar-xl m-b-20">
+                        <img src="{{ user.profile_picture.url }}" class="rounded-circle" alt="...">
+                    </figure>
+                    <h5>{{ user.name }}</h5>
+                    <p class="text-muted small">{{ user.job }}</p>
+                    <p>{{ user.bio }}</p>
+
+                    <a href="{% url 'user-posts' %}" class="btn btn-outline-primary">
+                        پست های شما
+                    </a>
+
+                    <div class="row m-t-30">
+                        <div class="col-4 text-info">
+                            <h5 class="primary-font">{{ posts|length }}</h5>
+                            <span>مطلب</span>
+                        </div>
+                        <div class="col-4 text-success">
+                            <h5 class="primary-font">{{ followers|length }}</h5>
+                            <span>دنبال کننده</span>
+                        </div>
+                        <div class="col-4 text-warning">
+                            <h5 class="primary-font">{{ num_liked_post }}</h5>
+                            <span>لایک</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                    <div class="card-body">
+
+                        <ul class="nav nav-pills flex-column flex-sm-row" id="myTab" role="tablist">
+                            {% comment %}<li class="flex-sm-fill text-sm-center nav-item">
+                                <a class="nav-link active" id="hometimeline-tab" data-toggle="tab" href="#timeline" role="tab" aria-controls="home" aria-selected="true">خط زمانی</a>
+                            </li>{% endcomment %}
+
+                            <li class="flex-sm-fill text-sm-center nav-item">
+                                <a class="nav-link active" id="followers-tab1" data-toggle="tab" href="#followers" role="tab" aria-controls="followers" aria-selected="false">
+                                    دنبال کنندگان <span class="badge badge-light">{{ followers|length }}</span>
+                                </a>
+                            </li>
+
+                            <li class="flex-sm-fill text-sm-center nav-item">
+                                <a class="nav-link" id="following-tab" data-toggle="tab" href="#followings" role="tab" aria-controls="following" aria-selected="false">
+                                    دنبال شوندگان <span class="badge badge-light">{{ followings|length }}</span>
+                                </a>
+                            </li>
+
+                            <li class="flex-sm-fill text-sm-center nav-item">
+                                <a class="nav-link" id="photos-tab" data-toggle="tab" href="#photos" role="tab" aria-controls="profile" aria-selected="true">پست های شما <span class="badge badge-light">{{ posts|length }}</span></a>
+                            </li>
+
+                        </ul>
+
+                        <div class="tab-content p-t-30" id="myTabContent">
+
+                            <div class="tab-pane fade" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+                                <div class="row">
+                                    {% for post in posts %}
+                                        <div class="col-lg-4 mb-3"><img class="img-fluid rounded" src="{{ post.image.url }}" alt="image"></div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade show active" id="followers" role="tabpanel" aria-labelledby="followers-tab">
+                                <ul class="list-group list-group-flush">
+                                    {% for follower in followers %}
+                                        <li class="list-group-item d-flex align-items-center p-l-r-0">
+
+                                            <figure class="avatar avatar-sm m-l-15">
+                                                <a href="{% url 'profile-view' follower.user.id %}">
+                                                    <img class="rounded-circle" src="{{ follower.user.profile_picture.url }}" alt="">
+                                                </a>
+                                            </figure>
+
+                                            <div>
+                                                <h6 class="m-b-0 primary-font">{{ follower.user.name }}</h6>
+                                                <small class="text-muted">{{ follower.user.job }}</small>
+                                            </div>
+
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div class="tab-pane fade" id="followings" role="tabpanel" aria-labelledby="followings-tab">
+                                <ul class="list-group list-group-flush">
+                                    {% for following in followings %}
+                                        <li class="list-group-item d-flex align-items-center p-l-r-0">
+
+                                            <figure class="avatar avatar-sm m-l-15">
+                                                <a href="{% url 'profile-view' following.followed.id %}">
+                                                    <img class="rounded-circle" src="{{ following.followed.profile_picture.url }}" alt="">
+                                                </a>
+                                            </figure>
+
+                                            <div>
+                                                <h6 class="m-b-0 primary-font">{{ following.followed.name }}</h6>
+                                                <small class="text-muted">{{ following.followed.job }}</small>
+                                            </div>
+
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title d-flex justify-content-between align-items-center">
+                            اطلاعات
+                            <a href="{% url 'settings' %}" class="btn-sm primary-font">
+                                <i class="ti-pencil m-l-5"></i> ویرایش
+                            </a>
+                        </h5>
+                        <div class="row mb-2">
+                            <div class="col-6 text-muted">نام:</div>
+                            <div class="col-6">{{ user.name }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6 text-muted">سن:</div>
+                            <div class="col-6">{{ age }}</div>
+                        </div>
+
+                        {% if user.job %}
+                            <div class="row mb-2">
+                                <div class="col-6 text-muted">شغل:</div>
+                                <div class="col-6">{{ user.job }}</div>
+                            </div>
+                        {% endif %}
+
+                        {% if user.location %}
+                            <div class="row mb-2">
+                                <div class="col-6 text-muted">آدرس:</div>
+                                <div class="col-6">{{ user.location }}</div>
+                            </div>
+                        {% endif %}
+
+                        {% if user.phoneNumber %}
+                            <div class="row mb-2">
+                                <div class="col-6 text-muted">تلفن:</div>
+                                <div class="col-6">{{ user.phoneNumber }}</div>
+                            </div>
+                        {% endif %}
+
+                        <div class="row mb-2">
+                            <div class="col-6 text-muted">ایمیل:</div>
+                            <div class="col-6">{{ user.email }}</div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+    </div>
+</main>
+{% endblock %}

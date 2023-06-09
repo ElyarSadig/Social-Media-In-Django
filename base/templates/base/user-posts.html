@@ -1,0 +1,132 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    user-posts
+{% endblock %}
+
+{% block content %}
+    <main class="main-content">
+        <div class="container-fluid">
+            <div class="page-header">
+                <div>
+                    <h3>پست های شما</h3>
+                </div>
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        اقدامات
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <a class="dropdown-item" href="{% url 'create-post' %}">ایجاد پست</a>
+                    </div>
+                </div>
+            </div>
+
+            {% for post in posts %}
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <a href="{% url 'profile-view' post.user.id %}">
+                                <figure class="avatar">
+                                    <img src="{{ post.user.profile_picture.url }}" class="rounded-circle">
+                                </figure>
+                                 {{ post.user.name }}
+                            </a>
+
+                        </div>
+                        <img src="{{ post.image.url }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ post.title }}
+                            </h5>
+                            <p class="card-text">{{ post.content }}</p>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <a href="{% url 'like' post.id %}">
+                                            <div class="p-2 rounded-full text-black">
+                                                {{ post.like_set.all|length }}
+
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                </div>
+
+                                <div class="row text-center justify-content-md-center">
+
+                                    <a href="{% url 'update-post' post.id %}">
+                                        <div class="col-md-3">
+                                            <button type="button" class="btn btn-outline-warning btn-rounded btn-uppercase">
+                                                <i class="ti-settings m-l-5"></i> تنظیمات
+                                            </button>
+                                        </div>
+                                    </a>
+
+                                    <button type="button" class="btn btn-danger btn-square btn-uppercase" data-toggle="modal" data-target=".bd-example-modal-sm">
+                                        <i class="ti-trash m-l-5"></i> حذف
+                                    </button>
+
+                                    <div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">حذف پست</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    آیا از حذف این پست مطمئن هستید؟
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن
+                                                    </button>
+                                                    <form action="{% url 'delete-post' post.id %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-danger btn-square btn-uppercase">حذف</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        {% endfor %}
+
+            {% if posts.has_other_pages %}
+        <nav aria-label="Page navigation example" class="mb-3">
+            <ul class="pagination justify-content-center">
+                {% if posts.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ posts.previous_page_number }}" tabindex="-1" aria-disabled="true">قبلی</a>
+                    </li>
+                {% endif %}
+                {% for page in custom_range %}
+                    {% if page == posts.number %}
+                        <li class="page-item active"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if posts.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ posts.next_page_number }}">بعدی</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>قالب مدیریتی Gramos</title>
+
+    <!-- begin::global styles -->
+    <link rel="stylesheet" href="{% static 'vendors/bundle.css' %}" type="text/css">
+    <!-- end::global styles -->
+
+    <!-- begin::custom styles -->
+    <link rel="stylesheet" href="{% static 'css/app.css' %}" type="text/css">
+    <!-- end::custom styles -->
+
+	<!-- begin::favicon -->
+	<link rel="shortcut icon" href="{% static 'media/image/favicon.png' %}">
+	<!-- end::favicon -->
+
+	<!-- begin::theme color -->
+	<meta name="theme-color" content="#3f51b5" />
+	<!-- end::theme color -->
+
+</head>
+<body class="bg-white h-100-vh p-t-0">
+
+<!-- begin::page loader-->
+<div class="page-loader">
+    <div class="spinner-border"></div>
+    <span>در حال بارگذاری ...</span>
+</div>
+<!-- end::page loader -->
+
+<div class="container h-100-vh">
+    <div class="row align-items-center h-100-vh">
+        <div class="col-lg-6 d-none d-lg-block p-t-b-25">
+            <img class="img-fluid" src="{% static 'media/svg/login.svg' %}" alt="...">
+        </div>
+        <div class="col-lg-4 offset-lg-1 p-t-b-25">
+            <div class="d-flex align-items-center m-b-20">
+                <img src="{% static 'media/image/dark-logo.png' %}" class="m-l-15" width="40" alt="">
+                <h3 class="m-0">مدیریت گراموس</h3>
+            </div>
+            <p>برای ادامه وارد شوید.</p>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="form-group mb-4">
+                    <input type="text" class="form-control form-control-lg" name="username" id="exampleInputEmail1" autofocus placeholder="نام کاربری">
+                </div>
+                <div class="form-group mb-4">
+                    <input type="password" class="form-control form-control-lg" name="password" id="exampleInputPassword1" placeholder="رمز عبور">
+                </div>
+                <button class="btn btn-primary btn-lg btn-block btn-uppercase mb-4">ورود</button>
+
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+
+                        {% if message.tags == 'success' %}
+                            <li style="color: lawngreen">{{ message }}</li>
+                        {% else %}
+                            <li style="color: red">{{ message }}</li>
+                        {% endif %}
+                        {% endfor %}
+
+                    </ul>
+                {% endif %}
+                
+                <div class="text-center">
+                    حسابی ندارید؟ <a href="{% url 'register' %}" class="text-primary">ایجاد</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- begin::global scripts -->
+<script src="{% static 'vendors/bundle.js' %}"></script>
+<!-- end::global scripts -->
+
+<!-- begin::custom scripts -->
+<script src="{% static 'js/app.js' %}"></script>
+<!-- end::custom scripts -->
+
+</body>
+</html>
