@@ -2,15 +2,15 @@
 This repository contains the code for the Social Media App. The app allows users to create posts, comment on posts, follow other users, and interact with the content shared by the community.
 
 ## Installation
-1.Install the required dependencies:
+Install the required dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-2.Set up the database:
+Set up the database:
 ```python
 python manage.py migrate
 ```
-3.Start the development server:
+Start the development server:
 ```bash
 python manage.py runserver
 ```
